@@ -49,7 +49,17 @@ export default function Command(props: LaunchProps<{ draftValues: VideoUpdateFor
           return;
         }
 
-        if (stdout.includes("--- Video Update Script Finished") || stdout.includes("--- VIDEO UPDATE PROCESS ATTEMPTED SUCCESSFULLY")) {
+        if (stdout.includes("--- VIDEO UPDATE AND EMAIL AUTOMATION COMPLETED SUCCESSFULLY ---")) {
+          toast.style = Toast.Style.Success;
+          toast.title = "Video Updated & Email Sent";
+          toast.message = "The video has been added to the athlete's profile and 'Editing Done' email has been sent.";
+          reset();
+        } else if (stdout.includes("--- VIDEO UPDATE SUCCESSFUL BUT EMAIL AUTOMATION FAILED ---")) {
+          toast.style = Toast.Style.Success;
+          toast.title = "Video Updated";
+          toast.message = "Video added successfully, but email automation failed. Check logs for details.";
+          reset();
+        } else if (stdout.includes("--- Video Update Script Finished") || stdout.includes("--- VIDEO UPDATE PROCESS COMPLETED SUCCESSFULLY ---")) {
           toast.style = Toast.Style.Success;
           toast.title = "Video Updated Successfully";
           toast.message = "The video has been added to the athlete's profile.";
@@ -117,7 +127,7 @@ export default function Command(props: LaunchProps<{ draftValues: VideoUpdateFor
         </ActionPanel>
       }
     >
-      <Form.Description text="Enter the athlete's details to update their video profile using the Python Selenium automation. The browser will open automatically." />
+      <Form.Description text="Enter the athlete's details to update their video profile and automatically send an 'Editing Done' email. The browser will open automatically to complete both processes." />
       <Form.Separator />
 
       <Form.TextField

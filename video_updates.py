@@ -32,9 +32,122 @@ APPROVED_VIDEO_CHECKBOX_SELECTOR = "#add_approve_video"
 ADD_VIDEO_BUTTON_SELECTOR = "input#btn_save_profile.btn.btn-primary"
 POST_ALERT_SAVE_CHANGES_BUTTON_SELECTOR = "input#btn_save_profile.btn.btn-primary.photos_videosbtn"
 
+# Email automation selectors (from email_automation.py)
+TEMPLATE_DROPDOWN_SELECTOR = "#indvemailtemplate"
+SEND_EMAIL_BUTTON_SELECTOR = "#btnSendMessegeAthlete"
+
 DEFAULT_WAIT_TIMEOUT = 30
 SHORT_WAIT_TIMEOUT = 10
 VERY_SHORT_WAIT_TIMEOUT = 5
+
+def send_editing_done_email(driver, athlete_name):
+    """Send 'Editing Done' email after video update is complete"""
+    print(f"--- Starting Email Automation for 'Editing Done' template for: {athlete_name} ---")
+    wait = WebDriverWait(driver, DEFAULT_WAIT_TIMEOUT)
+    
+    try:
+        # Navigate back to video progress page
+        print(f"Navigating back to video progress page: {BASE_URL}")
+        driver.get(BASE_URL)
+        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, SEARCH_FIELD_SELECTOR)))
+        print("Successfully navigated back to video progress page.")
+        
+        # Search for the athlete again
+        print(f"Searching for athlete: {athlete_name}")
+        search_field = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, SEARCH_FIELD_SELECTOR)))
+        search_field.clear()
+        search_field.send_keys(athlete_name)
+        print(f"Typed '{athlete_name}' into search field.")
+        time.sleep(3)  # Wait for search results to load
+        
+        # Find and click email icon
+        print("Looking for email icon in search results...")
+        email_icon = None
+        
+        # Strategy 1: Look for any email icon (fa-envelope class is common for email icons)
+        try:
+            print("Strategy 1: Looking for email icon with fa-envelope class...")
+            email_icon = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "i.fa-envelope")))
+            print("Found email icon using fa-envelope class")
+        except TimeoutException:
+            print("Strategy 1 failed: No fa-envelope icon found")
+        
+        # Strategy 2: Look for any clickable <i> element that might be an email icon
+        if email_icon is None:
+            try:
+                print("Strategy 2: Looking for any clickable <i> element in search results...")
+                icons = driver.find_elements(By.CSS_SELECTOR, "i[class*='fa']")
+                for icon in icons:
+                    if icon.is_displayed() and icon.is_enabled():
+                        class_attr = icon.get_attribute("class") or ""
+                        if "envelope" in class_attr.lower() or "mail" in class_attr.lower():
+                            email_icon = icon
+                            print(f"Found potential email icon with classes: {class_attr}")
+                            break
+                        elif email_icon is None:
+                            email_icon = icon
+                            print(f"Using fallback icon with classes: {class_attr}")
+            except Exception as e:
+                print(f"Strategy 2 failed: {e}")
+        
+        if email_icon is None:
+            raise TimeoutException("Could not find any email icon in search results")
+        
+        print("Clicking email icon...")
+        email_icon.click()
+        print("Email icon clicked successfully.")
+        
+        print("Waiting for email template popup...")
+        time.sleep(1.5)  # Wait for popup to appear
+        
+        # Click the first option to activate dropdown
+        first_option_selector_css = f"{TEMPLATE_DROPDOWN_SELECTOR} > option:nth-child(1)"
+        print(f"Attempting to click the first option to activate dropdown: {first_option_selector_css}")
+        try:
+            first_option = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, first_option_selector_css)))
+            first_option.click()
+            print("Clicked the first option.")
+        except TimeoutException:
+            print("Could not click the first option. The dropdown might already be open.")
+        
+        # Wait for options to load
+        print("Pausing for 2 seconds for options to load...")
+        time.sleep(2)
+        
+        # Select "Editing Done" template (option 2)
+        editing_done_option_selector = f"{TEMPLATE_DROPDOWN_SELECTOR} > option:nth-child(2)"
+        print(f"Attempting to select 'Editing Done' template: {editing_done_option_selector}")
+        editing_done_option = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, editing_done_option_selector)))
+        editing_done_option.click()
+        print("Selected 'Editing Done' template.")
+        
+        print("Holding for 2 seconds for review...")
+        time.sleep(2)
+        
+        # Click send email button
+        print(f"Attempting to click send email button: {SEND_EMAIL_BUTTON_SELECTOR}")
+        send_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, SEND_EMAIL_BUTTON_SELECTOR)))
+        send_button.click()
+        print("Send email button clicked.")
+        
+        print("Pausing for 2 seconds to allow email sending...")
+        time.sleep(2)
+        
+        print(f"--- 'Editing Done' Email Sent Successfully for {athlete_name} ---")
+        return True
+        
+    except TimeoutException as e:
+        print(f"--- EMAIL AUTOMATION ERROR: A timeout occurred --- Details: {e}")
+        return False
+    except NoSuchElementException as e:
+        print(f"--- EMAIL AUTOMATION ERROR: An element was not found --- Details: {e}")
+        return False
+    except Exception as e:
+        print(f"--- AN UNEXPECTED EMAIL AUTOMATION ERROR OCCURRED --- Details: {str(e)}")
+        print(f"Exception type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc(file=sys.stdout)
+        return False
 
 def update_video_info_in_browser(driver, args):
     print("--- Starting Video Automation (Python Selenium) ---")
@@ -155,20 +268,34 @@ def update_video_info_in_browser(driver, args):
             print("No alert was present after clicking 'Add Video', or it was handled too quickly.")
         
         print("Pausing after alert handling before attempting post-alert save...")
-        time.sleep(3) # Changed pause to 3 seconds
+        time.sleep(2) # Shortened from 3 to 2 seconds
         
         # Logic for clicking the second "Save Changes" button, using the same selector
         print(f"Attempting to click 'Save Changes' button (post-alert): {POST_ALERT_SAVE_CHANGES_BUTTON_SELECTOR}")
+        video_update_successful = False
         try:
             post_alert_save_button = short_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, POST_ALERT_SAVE_CHANGES_BUTTON_SELECTOR)))
             driver.execute_script("arguments[0].click();", post_alert_save_button)
             print("'Save Changes' button (post-alert) clicked.")
-            time.sleep(3) # Wait for save to process
-            print("--- VIDEO UPDATE PROCESS ATTEMPTED SUCCESSFULLY (Python Selenium) ---")
+            time.sleep(2) # Wait for save to process
+            video_update_successful = True
+            print("--- VIDEO UPDATE PROCESS COMPLETED SUCCESSFULLY ---")
         except TimeoutException:
             print("Could not find or click 'Save Changes' button (post-alert) within timeout.")
             print("This might be okay if the 'Add Video' action and alert already saved everything.")
-            print("--- VIDEO ADDED, POST-ALERT SAVE SKIPPED OR NOT FOUND (Python Selenium) ---")
+            video_update_successful = True  # Assume success if alert handling worked
+            print("--- VIDEO ADDED, POST-ALERT SAVE SKIPPED OR NOT FOUND ---")
+
+        # NOW ADD EMAIL AUTOMATION - Send "Editing Done" email
+        if video_update_successful:
+            print("--- STARTING EMAIL AUTOMATION PHASE ---")
+            email_sent = send_editing_done_email(driver, args.athlete_name)
+            if email_sent:
+                print("--- VIDEO UPDATE AND EMAIL AUTOMATION COMPLETED SUCCESSFULLY ---")
+            else:
+                print("--- VIDEO UPDATE SUCCESSFUL BUT EMAIL AUTOMATION FAILED ---")
+        else:
+            print("--- VIDEO UPDATE FAILED, SKIPPING EMAIL AUTOMATION ---")
 
     except TimeoutException as e:
         print(f"--- AUTOMATION ERROR: A timeout occurred --- Details: {e}")
