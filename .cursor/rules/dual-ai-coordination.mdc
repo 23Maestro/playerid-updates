@@ -1,0 +1,75 @@
+# Enhanced Cursor Rules for Dual AI Memory System Coordination
+
+## Core Development Environment
+- This system coordinates Cursor (project understanding) with Gemini CLI (active coding)
+- Maintains two complementary AI memory systems without duplication
+- Uses npm commands (npm install, npm run dev, npm run build)
+- Focuses on complex integrations: Dropbox API, Selenium automation, OAuth patterns
+
+## Memory System Coordination Rules
+
+### Cursor Memory Bank (This System)
+**Purpose**: Project context, architecture, progress tracking, business logic
+**Triggers**: Project planning, design decisions, session starts, integration analysis
+**Usage**: "Read memory bank files" to establish full project context
+
+### Gemini CLI Context (GEMINI.md files)
+**Purpose**: Coding style, preferences, specific implementation guidance
+**Triggers**: Active development, file operations, debugging, code generation
+**Usage**: Automatic loading when running `gemini` in project directories
+
+### Information Distribution Strategy
+- **Cursor Gets**: Why projects exist, business context, integration patterns, OAuth flows
+- **Gemini Gets**: How to code them, style preferences, implementation guidelines
+- **No Overlap**: Complementary information, never duplicate
+
+## Advanced Integration Intelligence
+
+### Dropbox Tools Context
+- **Cursor**: OAuth security patterns, business workflow, API integration architecture
+- **Gemini**: Dropbox SDK usage, error handling patterns, form validation code
+- **Coordination**: Both understand National Prospect ID business requirements
+
+### PlayerID Updates Context  
+- **Cursor**: Browser automation architecture, template system design, workflow orchestration
+- **Gemini**: Selenium implementation details, email template code, process management
+- **Coordination**: Both understand student athlete communication workflows
+
+### Stream Deck Profile Generator Context
+- **Cursor**: AI tool coordination, OCR processing strategy, multi-page logic
+- **Gemini**: Stream Deck format compliance, AI tool implementation, parsing algorithms
+- **Coordination**: Both understand AI-driven profile generation workflows
+
+## Context Switching Intelligence
+
+### Planning Phase (Cursor Domain)
+- OAuth integration strategy and security considerations
+- Browser automation architecture and error recovery patterns
+- API integration design and business logic coordination
+- Cross-project pattern recognition and template development
+
+### Implementation Phase (Gemini CLI Domain)
+- Active coding with OAuth, Selenium, and API implementation
+- File operations and complex integration development
+- Debugging automation scripts and API integration issues
+- Large codebase analysis and refactoring across multiple projects
+
+### Coordination Phase (Both Systems)
+- GEMINI.md file creation and maintenance for complex projects
+- Ensuring integration patterns are documented in both systems
+- Workflow optimization for advanced development scenarios
+- Template development for OAuth, automation, and API patterns
+
+## Quality Standards for Advanced Projects
+- Always maintain both memory systems when making significant integration changes
+- Ensure GEMINI.md files include specific patterns for OAuth, Selenium, API usage
+- Update Cursor memory bank when integration architecture evolves
+- Test context effectiveness through actual development of complex features
+
+## Learning and Evolution for Complex Integrations
+- Capture successful OAuth implementation patterns
+- Document effective browser automation and error recovery strategies
+- Improve API integration templates based on real usage
+- Share complex integration patterns across similar projects
+
+When user mentions advanced integrations, OAuth, browser automation, or API development, always reference both the Cursor memory bank context and the GEMINI.md hierarchical system for comprehensive understanding.

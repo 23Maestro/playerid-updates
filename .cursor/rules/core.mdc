@@ -1,0 +1,29 @@
+# Core Cursor Rules
+
+## Development Environment
+- This is a Raycast extension project
+- Uses TypeScript and React
+- Package manager: npm
+- Follow Raycast API conventions and best practices
+
+## Code Quality
+- Use TypeScript for all files
+- Follow ESLint and Prettier configurations
+- Maintain consistent code style across the project
+- Use meaningful variable and function names
+
+## Documentation
+- Keep README.md updated with feature changes
+- Document complex functions and components
+- Update CHANGELOG.md for significant changes
+
+## Project Structure
+- Source code in `src/` directory
+- Assets in `assets/` directory
+- Follow Raycast extension structure conventions
+
+## Development Guidelines
+- Test functionality before committing
+- Keep dependencies minimal and necessary
+- Follow semantic versioning for releases
+- Maintain backward compatibility when possible

@@ -1,0 +1,25 @@
+# Memory Bank Integration Rules
+
+## Memory Bank Usage
+- ALWAYS read the memory-bank files at the start of each task
+- Reference project context from memory-bank documentation
+- Update memory-bank files when making significant changes
+- Use memory-bank/notes for specific implementation details
+
+## File Reading Priority
+1. Read `memory-bank/00-project-overview.md` first
+2. Read `memory-bank/01-architecture.md` for technical context
+3. Check `memory-bank/02-features.md` for functionality details
+4. Review relevant files in `memory-bank/notes/` for specific areas
+
+## Memory Bank Maintenance
+- Suggest updates to memory-bank files when project evolves
+- Keep documentation current with code changes
+- Add new notes files for complex features or decisions
+- Remove outdated information proactively
+
+## Integration Guidelines
+- Use memory-bank context to maintain consistency
+- Reference established patterns and conventions
+- Build upon existing architecture and design decisions
+- Preserve institutional knowledge across sessions
